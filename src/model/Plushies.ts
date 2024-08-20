@@ -8,8 +8,6 @@
 //check liveserver for ts 
 //abstract class makes methods that can be implemented by it's children classes
 
-import Teddy from "./Teddy";
-import { StatusProduct } from "./isAvailable";
 
 export default class Plushie {
     private name: string;
@@ -17,6 +15,7 @@ export default class Plushie {
     private costPrice: number = 0;
     salePrice: number = 0;
     static lastId: number = 0;
+    private available: boolean = true;
 
     constructor(name: string) {
         this.name = name;
