@@ -2,6 +2,11 @@
 //readonly is a cont, don't forget
 //you can intersect types with &, like PlushieKawaii with = Plushie & Kawaii
 //remember you can use union types, like var: string | number
+//remember to add lib: ["DOM"] in tsconfig
+//if you use ! after a getElementById (or another operation), it will tell TS that that elelment will never be null
+//Yo ucan use a variable as another
+//check liveserver for ts 
+//abstract class makes methods that can be implemented by it's children classes
 
 import Teddy from "./Teddy";
 import { StatusProduct } from "./isAvailable";
