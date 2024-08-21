@@ -35,7 +35,7 @@ export default class Plushie {
     }
 
     public setCostPrice(costPrice: number) {
-        this,costPrice = costPrice;
+        this.costPrice = costPrice;
     }
 
     public getSalePrice() : number {
