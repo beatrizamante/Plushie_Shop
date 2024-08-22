@@ -8,18 +8,21 @@
 //check liveserver for ts 
 //abstract class makes methods that can be implemented by it's children classes
 
+import { StatusProduct } from "./isAvailable";
 
 export default class Plushie {
     private name: string;
+    private status: StatusProduct = 0;
     private id: number;
     private costPrice: number = 0;
     salePrice: number = 0;
     static lastId: number = 0;
     private available: boolean = true;
 
-    constructor(name: string) {
+    constructor(name: string, status: StatusProduct) {
+        this.status = status;
         this.name = name;
-        this.id = ++Plushie.lastId; 
+        this.id = this.idIteration(); 
     }
 
     public getName() : string {
@@ -46,8 +49,15 @@ export default class Plushie {
         this.salePrice = salePrice;
     }
 
-    public computeSalePrice() : void {
+    abstract computeSalePrice() : void {
     }
+
+    public static idIteration() : number {
+        Plushie.lastId += 1;
+        return Plushie.lastId;
+    }
+
+
 }
 
 
