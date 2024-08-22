@@ -1,0 +1,7 @@
+tsc --init
+tsc <file name>
+tsc -w <file> << watch mode  (recompila o arquivo em qualquer alteração)
+para compilar varios arquivos, tm que it no tsconfig.json, ffora do compilerOption e adicionar por , "files": []
+Dá de ajustar por include e exclude também 
+"target": é a versão para o JS marcado
+"strict" << ajusta os tipos de forma mais regrada 
