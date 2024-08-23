@@ -1,6 +1,6 @@
-import { Plushie, enum } from "./Plushies";
+import Plushies from "./Plushies";
 
-export default class Kawaii extends Plushie {
+export default class Kawaii extends Plushies {
     private softMaterials: string = " ";
 
     public getSoftMaterial() : string {
