@@ -11,9 +11,4 @@ export default class Kawaii extends Plushies {
         this.softMaterials = softMaterials;
     }
 
-    public computeSalePrice(): void {
-        super.setSalePrice(this.getCostPrice() * 2.5);
-    }    
-
-
 }

@@ -13,16 +13,15 @@ import { StatusProduct } from "./isAvailable";
 export default class Plushie {
     private name: string;
     private status: StatusProduct = 0;
-    private id: number;
+    private id: number = 0;
     private costPrice: number = 0;
-    salePrice: number = 0;
     static lastId: number = 0;
-    private available: boolean = true;
 
-    constructor(name: string, status: StatusProduct) {
+    constructor(name: string, status: StatusProduct, costPrice: number) {
+        this.costPrice = costPrice || 0;
         this.status = status;
         this.name = name;
-        this.id = this.idIteration(); 
+        this.id = Plushie.idIteration(); 
     }
 
     public getName() : string {
@@ -39,17 +38,6 @@ export default class Plushie {
 
     public setCostPrice(costPrice: number) {
         this.costPrice = costPrice;
-    }
-
-    public getSalePrice() : number {
-        return this.salePrice;
-    }
-
-    public setSalePrice(salePrice: number) {
-        this.salePrice = salePrice;
-    }
-
-    abstract computeSalePrice() : void {
     }
 
     public static idIteration() : number {
