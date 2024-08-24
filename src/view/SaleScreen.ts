@@ -1,10 +1,12 @@
 import promptSync from "prompt-sync";
 import PlushieController from "../control/PlushieController";
 import Plushie from "../model/Plushies";
+import Client from "../model/Client";
 
 export default class PrimaryScreen {
     private prompt = promptSync();
     private controller: PlushieController;
+    private currentClient: Client | null = null;
 
     constructor(controller: PlushieController) {
         this.controller = controller;
@@ -18,12 +20,17 @@ export default class PrimaryScreen {
 
             switch (choice) {
                 case "1":
-                    this.choosePlushie();
+                    if (this.currentClient) {
+                        this.choosePlushie();
+                    } else {
+                        console.log("Nenhum cliente registrado.");
+                    }
                     break;
 
                 case "2":
-                    this.registerClient();
-                    break;
+                    const name = this.prompt("Digite o nome do cliente: ");
+                    const phoneNumber = parseInt(this.prompt("Digite o número de telefone: "));
+                    this.currentClient = this.controller.registerClient(name, phoneNumber);
 
                 case "3":
                     this.returnStart();
@@ -64,15 +71,19 @@ export default class PrimaryScreen {
         }
 
         if (plushie) {
-            this.controller.addPlushieToCart(plushie);
+            this.controller.addPlushieToCart(this.currentClient!.getId(), plushie);
         }
     }
 
-    private registerClient(): void {
-        console.log("Cliente registrado.");
-    }
-
     private returnStart(): void {
+        if (this.currentClient) {
+            const cart = this.currentClient.getCart();
+            console.log("Resumo do Carrinho:");
+            cart.getCartProducts().forEach(product => {
+                console.log(`- ${product.getName()}`);
+            });
+            console.log(`Preço Total: ${cart.calculateTotalPrice()}`);
+        }
         console.log("Voltando ao início...");
     }
 }

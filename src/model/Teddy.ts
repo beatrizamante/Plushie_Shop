@@ -1,16 +1,15 @@
 import Plushie from "./Plushies";
+import { StatusProduct } from "./isAvailable";
 
 export default class Teddy extends Plushie {
-    private donation: number = 0;
+    private donation: number;
 
-    public computeSalePrice(): void {
-        super.setSalePrice(this.getCostPrice() * 1.5);
-    }    
-
-    public Donation() : number {
-        this.computeSalePrice()
-        return (this.getSalePrice() * 0.35)
+    constructor(name: string, status: StatusProduct, costPrice: number) {
+        super(name, status, costPrice);
+        this.donation = costPrice * 0.30;
     }
 
-
+    public getDonation(): number {
+        return this.donation;
+    }
 }
