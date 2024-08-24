@@ -13,24 +13,21 @@
 //abstract class makes methods that can be implemented by it's children classes
 >>>>>>> f14413375bd8c345fd013b06bd58e6233731bcfb
 
+import { StatusProduct } from "./isAvailable";
 
 export default class Plushie {
     private isAvailable: StatusProduct = 0;
     private name: string;
-    private id: number;
+    private status: StatusProduct = 0;
+    private id: number = 0;
     private costPrice: number = 0;
-    private static currentId = 0;
-    salePrice: number = 0;
-<<<<<<< HEAD
-=======
     static lastId: number = 0;
-    private available: boolean = true;
->>>>>>> f14413375bd8c345fd013b06bd58e6233731bcfb
 
-    constructor(name: string) {
-        this.isAvailable = this.isAvailable;
+    constructor(name: string, status: StatusProduct, costPrice: number) {
+        this.costPrice = costPrice || 0;
+        this.status = status;
         this.name = name;
-        this.id = Plushie.idIteration();
+        this.id = Plushie.idIteration(); 
     }
 
     public getName() : string {
@@ -46,24 +43,15 @@ export default class Plushie {
     }
 
     public setCostPrice(costPrice: number) {
-        this,costPrice = costPrice;
+        this.costPrice = costPrice;
     }
 
-    public getSalePrice() : number {
-        return this.salePrice;
+    public static idIteration() : number {
+        Plushie.lastId += 1;
+        return Plushie.lastId;
     }
 
-    public setSalePrice(salePrice: number) {
-        this.salePrice = salePrice;
-    }
 
-    public computeSalePrice() : void {
-    }
-
-    private static idIteration() : number {
-        Plushie.currentId += 1;
-        return Plushie.currentId;
-    }
 }
 
 

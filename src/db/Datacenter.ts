@@ -2,11 +2,15 @@ import Plushie from "../model/Plushies";
 
 export default class Datacenter {
     private plushies: Plushie[] = [];
+    private id: number = 0;
 
-    public addNewPlushie(plushies: Plushie) : void {
-        this.plushies.push(plushies);
+    public addNewPlushie(plushie: Plushie) : void {
+        this.plushies.push(plushie);
     }
 
-    public removeFood(id: number) : void {
+    public removePlushie(id: number) : void {
+        
     }
+
+    
 }

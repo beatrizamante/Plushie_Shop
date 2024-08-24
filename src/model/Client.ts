@@ -9,7 +9,7 @@ export default class Client {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber; 
-        this.id = ++Client.lastId; 
+        this.id = Client.idIteration(); 
     }
 
     public getName() : string {
@@ -37,6 +37,11 @@ export default class Client {
             throw new Error("Invalid phone number.");
         }
         this.phoneNumber = phoneNumber;
+    }
+
+    public static idIteration(): number {
+        Client.lastId += 1;
+        return Client.lastId;
     }
 
 
