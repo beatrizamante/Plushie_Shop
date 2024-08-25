@@ -4,68 +4,111 @@ import Complex from "../model/Complex";
 import Kawaii from "../model/Kawaii";
 import Teddy from "../model/Teddy";
 import { StatusProduct } from "../model/isAvailable";
+import Datacenter from "../db/Datacenter";
 
-export default class Cart {
-    private clients: Map<number, Client> = new Map();
-    private cartProducts: Plushie[] = [];
+export default class PlushieController {
+    private datacenter: Datacenter;
 
-    constructor(cartProducts: Plushie[]) {
-        this.cartProducts = cartProducts;
+    constructor(datacenter: Datacenter) {
+        this.datacenter = datacenter;
+        this.loadInitialData();
     }
 
-    public addProduct(plushie: Plushie): void {
-        this.cartProducts.push(plushie);
+    private loadInitialData(): void {
+        try {
+            this.datacenter.loadClients();
+            this.datacenter.loadPlushies();
+        } catch (error) {
+            console.error("Failed to load initial data:", error);
+        }
     }
 
-    public removeProduct(plushie: Plushie): void {
-        this.cartProducts = this.cartProducts.filter(product => product.getId() !== plushie.getId());
-    }
-
-    public calculateTotalPrice(): number {
-        return this.cartProducts.reduce((total, plushie) => {
-            let price = plushie.getCostPrice();
-            if (plushie instanceof Kawaii) {
-                price *= 1.65;
-            } else if (plushie instanceof Complex) {
-                price *= 2;
+    public addProductToCart(clientId: number, plushie: Plushie): void {
+        try {
+            const client = this.datacenter.getClientById(clientId);
+            if (client) {
+                client.getCart().addProduct(plushie);
+                this.datacenter.saveCart(clientId);
+                console.log(`${plushie.getName()} added to cart for client ID ${clientId}.`);
+            } else {
+                console.log("Client not found.");
             }
-            return total + price;
-        }, 0);
-    }
-    
-    public registerClient(name: string, phoneNumber: number): Client {
-        const client = new Client(name, phoneNumber);
-        this.clients.set(client.getId(), client);
-        console.log(`Client registered with ID ${client.getId()}.`);
-        return client;
+        } catch (error) {
+            console.error("Failed to add product to cart:", error);
+        }
     }
 
-    public getCartProducts(): Plushie[] {
-        return this.cartProducts;
+    public removeProductFromCart(clientId: number, plushie: Plushie): void {
+        try {
+            const client = this.datacenter.getClientById(clientId);
+            if (client) {
+                client.getCart().removeProduct(plushie);
+                this.datacenter.saveCart(clientId);
+                console.log(`${plushie.getName()} removed from cart for client ID ${clientId}.`);
+            } else {
+                console.log("Client not found.");
+            }
+        } catch (error) {
+            console.error("Failed to remove product from cart:", error);
+        }
     }
 
-    public addPlushieToCart(clientId: number, plushie: Plushie): void {
-        const client = this.clients.get(clientId);
-        if (client) {
-            client.getCart().addProduct(plushie);
-            console.log(`${plushie.getName()} added to cart for client ID ${clientId}.`);
-        } else {
-            console.log("Client not found.");
+    public calculateTotalPrice(clientId: number): number {
+        try {
+            const client = this.datacenter.getClientById(clientId);
+            if (client) {
+                return client.getCart().calculateTotalPrice();
+            } else {
+                console.log("Client not found.");
+                return 0;
+            }
+        } catch (error) {
+            console.error("Failed to calculate total price:", error);
+            return 0;
+        }
+    }
+
+    public registerClient(name: string): Client {
+        try {
+            const client = new Client(name);
+            this.datacenter.addClient(client);
+            this.datacenter.saveClients();
+            return client;
+        } catch (error) {
+            console.error("Failed to register client:", error);
+            throw error;
         }
     }
 
     public createPlushie(type: string): Plushie | null {
-        switch (type) {
-            case "Teddy":
-                return new Teddy("Teddy", StatusProduct.active, 50); 
-            case "Kawaii":
-                return new Kawaii("Kawaii", StatusProduct.active, 50); 
-            case "Complex":
-                return new Complex("Complex", StatusProduct.active, 50); 
-            default:
-                console.log("Unknown plushie type.");
-                return null;
+        try {
+            let plushie: Plushie | null = null;
+
+            switch (type) {
+                case "Teddy":
+                    plushie = new Teddy("Teddy", StatusProduct.active, 50);
+                    break;
+                case "Kawaii":
+                    plushie = new Kawaii("Kawaii", StatusProduct.active, 50);
+                    break;
+                case "Complex":
+                    plushie = new Complex("Complex", StatusProduct.active, 50);
+                    break;
+                default:
+                    console.log("Unknown plushie type.");
+                    return null;
+            }
+
+            if (plushie) {
+                this.datacenter.addPlushie(plushie);
+                this.datacenter.savePlushies();
+                return plushie;
+            }
+
+            return null;
+        } catch (error) {
+            console.error("Failed to create plushie:", error);
+            return null; 
         }
     }
-
 }
