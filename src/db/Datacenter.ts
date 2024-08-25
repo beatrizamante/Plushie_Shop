@@ -1,5 +1,8 @@
 import Client from "../model/Client";
 import Plushie from "../model/Plushies";
+import { LocalStorage } from 'node-localstorage';
+
+const localStorage = new LocalStorage('./scratch');
 
 export default class Datacenter {
     private clients: Client[] = [];

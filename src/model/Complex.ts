@@ -11,9 +11,4 @@ export default class Complex extends Plushie {
         this.bodyShape = bodyShape;
     }
 
-    public computeSalePrice(): void {
-        super.setSalePrice(this.getCostPrice() * 3.5);
-    }    
-
-
 }
