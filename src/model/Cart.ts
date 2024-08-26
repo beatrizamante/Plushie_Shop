@@ -20,6 +20,8 @@ export default class Cart extends AbstractCart<Plushie> {
     }
 
     public calculateTotalPrice(): number {
+        console.log("Calculando o preço total...");
+        console.log("Produtos no carrinho:", this.cartProducts);
         return this.cartProducts.reduce((total, plushie) => {
             let price = plushie.getCostPrice();
             if (plushie instanceof Kawaii) {
@@ -27,8 +29,12 @@ export default class Cart extends AbstractCart<Plushie> {
             } else if (plushie instanceof Complex) {
                 price *= 2;
             }
+
+            
+            console.log("Preço total calculado:", total);
             return total + price;
         }, 0);
+
     }
 
     public getCartProducts(): Plushie[] {
