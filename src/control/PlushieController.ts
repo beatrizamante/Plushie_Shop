@@ -27,7 +27,8 @@ export default class PlushieController {
         try {
             const client = this.datacenter.getClientById(clientId);
             if (client) {
-                client.getCart().addProduct(plushie);
+                const cart = client.getCart();
+                cart.addProduct(plushie);
                 this.datacenter.saveCart(clientId);
                 console.log(`${plushie.getName()} added to cart for client ID ${clientId}.`);
             } else {
