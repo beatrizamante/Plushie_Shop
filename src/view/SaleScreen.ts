@@ -3,6 +3,7 @@ import PlushieController from "../control/PlushieController";
 import Plushie from "../model/Plushies";
 import Client from "../model/Client";
 import MyError from "../services/MyError";
+import generatePDF from "../model/GeneraterPDF";
 
 export default class PrimaryScreen {
     private prompt = promptSync();
@@ -97,6 +98,8 @@ export default class PrimaryScreen {
                     console.log(`- ${product.getName()}`);
                 });
                 console.log(`Preço Total: ${cart.calculateTotalPrice()}`);
+                generatePDF(this.currentClient);
+                console.log("PDF Criado")
             }
             console.log("Voltando ao início...");
         } catch (error) {
