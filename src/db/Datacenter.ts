@@ -17,6 +17,7 @@ export default class Datacenter {
     }
 
     public saveClients(): void {
+        console.log()
         try {
             localStorage.setItem("clients", JSON.stringify(this.clients.map(client => ({
                 id: client.getId(),
@@ -30,11 +31,7 @@ export default class Datacenter {
             }))));
             console.log("Clientes salvos no localStorage");
         } catch (error) {
-            if (error instanceof Error) {
-                console.error("Falha ao salvar clientes:", error.message);
-            } else {
-                console.error("Falha ao salvar clientes devido a um erro desconhecido.");
-            }
+            console.error("Falha ao salvar clientes:", error instanceof Error ? error.message : "Erro desconhecido");
         }
     }
 
@@ -58,24 +55,20 @@ export default class Datacenter {
                 console.log("Clientes carregados do localStorage");
             }
         } catch (error) {
-            if (error instanceof Error) {
-                console.error("Falha ao carregar clientes:", error.message);
-            } else {
-                console.error("Falha ao carregar clientes devido a um erro desconhecido.");
-            }
+            console.error("Falha ao carregar clientes:", error instanceof Error ? error.message : "Erro desconhecido");
         }
     }
 
     public savePlushies(): void {
         try {
-            localStorage.setItem("plushies", JSON.stringify(this.plushies));
+            localStorage.setItem("plushies", JSON.stringify(this.plushies.map(plushie => ({
+                name: plushie.getName(),
+                status: plushie.getStatus(),
+                costPrice: plushie.getCostPrice()
+            }))));
             console.log("Ursinhos salvos no localStorage");
         } catch (error) {
-            if (error instanceof Error) {
-                console.error("Falha ao salvar ursinhos:", error.message);
-            } else {
-                console.error("Falha ao salvar ursinhos devido a um erro desconhecido.");
-            }
+            console.error("Falha ao salvar ursinhos:", error instanceof Error ? error.message : "Erro desconhecido");
         }
     }
 
@@ -89,11 +82,7 @@ export default class Datacenter {
                 console.log("Ursinhos carregados do localStorage");
             }
         } catch (error) {
-            if (error instanceof Error) {
-                console.error("Falha ao carregar ursinhos:", error.message);
-            } else {
-                console.error("Falha ao carregar ursinhos devido a um erro desconhecido.");
-            }
+            console.error("Falha ao carregar ursinhos:", error instanceof Error ? error.message : "Erro desconhecido");
         }
     }
 
@@ -105,17 +94,18 @@ export default class Datacenter {
         try {
             const client = this.getClientById(clientId);
             if (client) {
-                localStorage.setItem(`cart_${clientId}`, JSON.stringify(client.getCart().getCartProducts()));
+                localStorage.setItem(`cart_${clientId}`, JSON.stringify(client.getCart().getCartProducts().map(plushie => ({
+                    id: plushie.getId(),
+                    name: plushie.getName(),
+                    status: plushie.getStatus(),
+                    costPrice: plushie.getCostPrice()
+                }))));
                 console.log(`Carrinho do cliente com ID ${clientId} salvo`);
             } else {
                 console.log("Cliente não encontrado.");
             }
         } catch (error) {
-            if (error instanceof Error) {
-                console.error(`Falha ao salvar o carrinho do cliente com ID ${clientId}:`, error.message);
-            } else {
-                console.error(`Falha ao salvar o carrinho do cliente com ID ${clientId} devido a um erro desconhecido.`);
-            }
+            console.error(`Falha ao salvar o carrinho do cliente com ID ${clientId}:`, error instanceof Error ? error.message : "Erro desconhecido");
         }
     }
 
@@ -138,11 +128,7 @@ export default class Datacenter {
                 console.log("Carrinho não encontrado.");
             }
         } catch (error) {
-            if (error instanceof Error) {
-                console.error(`Falha ao carregar o carrinho do cliente com ID ${clientId}:`, error.message);
-            } else {
-                console.error(`Falha ao carregar o carrinho do cliente com ID ${clientId} devido a um erro desconhecido.`);
-            }
+            console.error(`Falha ao carregar o carrinho do cliente com ID ${clientId}:`, error instanceof Error ? error.message : "Erro desconhecido");
         }
     }
 }

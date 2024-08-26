@@ -5,6 +5,7 @@ import Kawaii from "../model/Kawaii";
 import Teddy from "../model/Teddy";
 import { StatusProduct } from "../model/isAvailable";
 import Datacenter from "../db/Datacenter";
+import MyError from "../services/MyError";
 
 export default class PlushieController {
     private datacenter: Datacenter;
@@ -19,7 +20,7 @@ export default class PlushieController {
             this.datacenter.loadClients();
             this.datacenter.loadPlushies();
         } catch (error) {
-            console.error("Failed to load initial data:", error);
+            throw new MyError("Algo deu errado!");
         }
     }
 
@@ -30,12 +31,12 @@ export default class PlushieController {
                 const cart = client.getCart();
                 cart.addProduct(plushie);
                 this.datacenter.saveCart(clientId);
-                console.log(`${plushie.getName()} added to cart for client ID ${clientId}.`);
+                console.log(`${plushie.getName()} adicionado ao carrinho do cliente ID ${clientId}.`);
             } else {
-                console.log("Client not found.");
+                console.log("Cliente não encontrado.");
             }
         } catch (error) {
-            console.error("Failed to add product to cart:", error);
+            throw new MyError("Algo deu errado!");
         }
     }
 
@@ -45,12 +46,12 @@ export default class PlushieController {
             if (client) {
                 client.getCart().removeProduct(plushie);
                 this.datacenter.saveCart(clientId);
-                console.log(`${plushie.getName()} removed from cart for client ID ${clientId}.`);
+                console.log(`${plushie.getName()} removido do carrinho do cliente ID ${clientId}.`);
             } else {
-                console.log("Client not found.");
+                console.log("Cliente não encontrado.");
             }
         } catch (error) {
-            console.error("Failed to remove product from cart:", error);
+            throw new MyError("Algo deu errado!");
         }
     }
 
@@ -60,12 +61,11 @@ export default class PlushieController {
             if (client) {
                 return client.getCart().calculateTotalPrice();
             } else {
-                console.log("Client not found.");
+                console.log("Cliente não encontrado.");
                 return 0;
             }
         } catch (error) {
-            console.error("Failed to calculate total price:", error);
-            return 0;
+            throw new MyError("Algo deu errado!");
         }
     }
 
@@ -76,8 +76,7 @@ export default class PlushieController {
             this.datacenter.saveClients();
             return client;
         } catch (error) {
-            console.error("Failed to register client:", error);
-            throw error;
+            throw new MyError("Algo deu errado!");
         }
     }
 
@@ -96,7 +95,7 @@ export default class PlushieController {
                     plushie = new Complex("Complex", StatusProduct.active, 50);
                     break;
                 default:
-                    console.log("Unknown plushie type.");
+                    console.log("Tipo de ursinho desconhecido.");
                     return null;
             }
 
@@ -108,8 +107,7 @@ export default class PlushieController {
 
             return null;
         } catch (error) {
-            console.error("Failed to create plushie:", error);
-            return null; 
+            throw new MyError("Algo deu errado!");
         }
     }
 }

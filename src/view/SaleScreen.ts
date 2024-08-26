@@ -2,6 +2,7 @@ import promptSync from "prompt-sync";
 import PlushieController from "../control/PlushieController";
 import Plushie from "../model/Plushies";
 import Client from "../model/Client";
+import MyError from "../services/MyError";
 
 export default class PrimaryScreen {
     private prompt = promptSync();
@@ -14,6 +15,7 @@ export default class PrimaryScreen {
 
     public display(): void {
         let showScreen: boolean = false;
+        console.log();
 
         while (!showScreen) {
             try {
@@ -45,11 +47,7 @@ export default class PrimaryScreen {
                         console.log("Escolha inválida.");
                 }
             } catch (error) {
-                if (error instanceof Error) {
-                    console.error("Ocorreu um erro:", error.message);
-                } else {
-                    console.error("Ocorreu um erro desconhecido");
-                }
+                throw new MyError("Something went wrong!");
             }
         }
     }
@@ -86,11 +84,7 @@ export default class PrimaryScreen {
                 this.controller.addProductToCart(this.currentClient!.getId(), plushie);
             }
         } catch (error) {
-            if (error instanceof Error) {
-                console.error("Ocorreu um erro ao escolher um ursinho:", error.message);
-            } else {
-                console.error("Ocorreu um erro desconhecido ao escolher um ursinho.");
-            }
+            throw new MyError("Something went wrong!");
         }
     }
 
@@ -106,11 +100,7 @@ export default class PrimaryScreen {
             }
             console.log("Voltando ao início...");
         } catch (error) {
-            if (error instanceof Error) {
-                console.error("Ocorreu um erro ao retornar ao início:", error.message);
-            } else {
-                console.error("Ocorreu um erro desconhecido ao retornar ao início.");
-            }
+            throw new MyError("Something went wrong!");
         }
     }
 }
