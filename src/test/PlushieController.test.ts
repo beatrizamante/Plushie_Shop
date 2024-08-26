@@ -10,23 +10,23 @@ describe('PlushieController', () => {
     let controller: PlushieController;
     let client: Client;
     let plushie: Plushie;
-    let cart: Cart;
 
     beforeEach(() => {
         datacenter = new Datacenter();
         controller = new PlushieController(datacenter);
 
         client = new Client("Prof Emerson");
-        cart = new Cart([]);
-        jest.spyOn(client, 'getCart').mockReturnValue(cart);
-        jest.spyOn(datacenter, 'getClientById').mockReturnValue(client);
+        client.getCart = jest.fn(() => new Cart([]));
+        datacenter.getClientById = jest.fn(() => client);
 
         plushie = new Teddy("Teddy", 1, 50);
     });
 
     it('Adiciona Plushie no carrinho e salva', () => {
+        const cart = client.getCart();
         const addProductSpy = jest.spyOn(cart, 'addProduct');
-        const saveCartMock = jest.spyOn(datacenter, 'saveCart').mockImplementation(() => {});
+        const saveCartMock = jest.fn();
+        jest.spyOn(datacenter, 'saveCart').mockImplementation(saveCartMock);
 
         controller.addProductToCart(client.getId(), plushie);
 
